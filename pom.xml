@@ -20,7 +20,7 @@
         <version>5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.sonatype</groupId>
+    <groupId>org.sonatype.spice</groupId>
     <artifactId>jersey-ahc-client</artifactId>
     <name>jersey-ahc-client</name>
     <version>1.0.0-SNAPSHOT</version>
