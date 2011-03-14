@@ -142,7 +142,7 @@
                             *
                         </Import-Package>
                         <Export-Package>
-                            com.ning.http.*;version="1.6.1"
+                            org.sonatype.spice.jersey.client.ahc.*;version="1.0.0"
                         </Export-Package>
                     </instructions>
                 </configuration>
