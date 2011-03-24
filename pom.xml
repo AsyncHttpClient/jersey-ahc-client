@@ -31,7 +31,7 @@
     <url>http://github.com/sonatype/jersey-ahc-client</url>
     <scm>
         <connection>scm:git@github.com:sonatype/jersey-ahc-client.git</connection>
-        <url>https://github.com/sonatype/jersey-ahc-client</url>
+        <url>scm:git@github.com:sonatype/jersey-ahc-client.git</url>
         <developerConnection>scm:git@github.com:sonatype/jersey-ahc-client.git</developerConnection>
     </scm>
     <prerequisites>
