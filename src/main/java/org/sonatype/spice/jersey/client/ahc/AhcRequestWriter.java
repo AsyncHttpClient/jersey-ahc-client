@@ -44,7 +44,6 @@ public class AhcRequestWriter extends RequestWriter {
             c.setRequestTimeoutInMs(readTimeout);
             requestBuilder.setPerRequestConfig(c);
         }
-        configureHeaders(cr.getMetadata(), requestBuilder);
         if (cr.getEntity() != null && needsBody) {
             final RequestEntityWriter re = getRequestEntityWriter(cr);
 
@@ -67,6 +66,8 @@ public class AhcRequestWriter extends RequestWriter {
                     out.write(content);
                 }
             });
+        } else {
+            configureHeaders(cr.getMetadata(), requestBuilder);            
         }
     }
 
