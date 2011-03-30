@@ -66,7 +66,7 @@ public class AuthTest extends AbstractGrizzlyServerTester {
         startServer(rc);
 
         DefaultAhcConfig config = new DefaultAhcConfig();
-        config.getAsyncHttpClientConfigBuilder().setRealm(new Realm.RealmBuilder().setUsePreemptiveAuth(true).setPrincipal("name").setPassword("password").build());
+        config.getAsyncHttpClientConfigBuilder().setRealm(new Realm.RealmBuilder().setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).setPrincipal("name").setPassword("password").build());
         AhcHttpClient c = AhcHttpClient.create(config);
 
         WebResource r = c.resource(getUri().build());
@@ -80,7 +80,7 @@ public class AuthTest extends AbstractGrizzlyServerTester {
         startServer(rc);
 
         DefaultAhcConfig config = new DefaultAhcConfig();
-        config.getAsyncHttpClientConfigBuilder().setRealm(new Realm.RealmBuilder().setUsePreemptiveAuth(true).setPrincipal("name").setPassword("password").build());
+        config.getAsyncHttpClientConfigBuilder().setRealm(new Realm.RealmBuilder().setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).setPrincipal("name").setPassword("password").build());
         AhcHttpClient c = AhcHttpClient.create(config);
 
         WebResource r = c.resource(getUri().build());
