@@ -134,11 +134,6 @@ public class AhcHttpClient extends Client {
         return new AhcHttpClient(createDefaultClientHander(cc), provider);
     }
 
-    @Override
-    public void destroy() {
-        clientHandler.getHttpClient().close();    
-    }
-
     /**
      * Create a default AsyncHttpClient client handler.
      *
