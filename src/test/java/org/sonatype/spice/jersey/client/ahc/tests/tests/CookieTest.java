@@ -48,6 +48,7 @@ import org.sonatype.spice.jersey.client.ahc.AhcHttpClient;
 import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
@@ -68,6 +69,11 @@ public class CookieTest extends AbstractGrizzlyServerTester {
             String e = (c == null) ? "NO-COOKIE" : c.getValue();
             return Response.ok(e).
                     cookie(new NewCookie("name", "value")).build();
+        }
+        @POST
+        public Response get(){
+          // return response without cookie
+          return Response.ok("wo-cookie").build();
         }
     }
         
@@ -104,5 +110,21 @@ public class CookieTest extends AbstractGrizzlyServerTester {
         assertEquals("NO-COOKIE", r.get(String.class));
         assertEquals("value", r.get(String.class));
 
+    }
+    
+    public void testSessionCookie(){
+        ResourceConfig rc = new DefaultResourceConfig(CookieResource.class);
+        rc.getProperties().put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS,
+                LoggingFilter.class.getName());
+        startServer(rc);
+        
+        DefaultAhcConfig config = new DefaultAhcConfig();
+        AhcHttpClient c = AhcHttpClient.create(config);
+
+        WebResource r = c.resource(getUri().build());
+
+        assertEquals("NO-COOKIE", r.get(String.class));
+        assertEquals("wo-cookie", r.post(String.class));
+        assertEquals("value", r.get(String.class));
     }
 }
