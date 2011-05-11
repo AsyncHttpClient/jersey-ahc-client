@@ -50,14 +50,9 @@ import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
 /**
- *
  * @author Paul.Sandoz@Sun.Com
  */
 public class CookieTest extends AbstractGrizzlyServerTester {
@@ -70,17 +65,18 @@ public class CookieTest extends AbstractGrizzlyServerTester {
             return Response.ok(e).
                     cookie(new NewCookie("name", "value")).build();
         }
+
         @POST
-        public Response get(){
-          // return response without cookie
-          return Response.ok("wo-cookie").build();
+        public Response get() {
+            // return response without cookie
+            return Response.ok("wo-cookie").build();
         }
     }
-        
+
     public CookieTest(String testName) {
         super(testName);
     }
-    
+
     public void testCookie() {
         ResourceConfig rc = new DefaultResourceConfig(CookieResource.class);
         rc.getProperties().put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS,
@@ -111,13 +107,13 @@ public class CookieTest extends AbstractGrizzlyServerTester {
         assertEquals("value", r.get(String.class));
 
     }
-    
-    public void testSessionCookie(){
+
+    public void testSessionCookie() {
         ResourceConfig rc = new DefaultResourceConfig(CookieResource.class);
         rc.getProperties().put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS,
                 LoggingFilter.class.getName());
         startServer(rc);
-        
+
         DefaultAhcConfig config = new DefaultAhcConfig();
         AhcHttpClient c = AhcHttpClient.create(config);
 

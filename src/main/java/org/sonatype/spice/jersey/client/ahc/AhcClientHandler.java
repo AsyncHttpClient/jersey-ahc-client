@@ -11,19 +11,15 @@
  *******************************************************************************/
 package org.sonatype.spice.jersey.client.ahc;
 
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.Cookie;
-import com.ning.http.client.FluentCaseInsensitiveStringsMap;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
+import com.ning.http.client.*;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
-import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
-import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 import com.sun.jersey.core.header.InBoundHeaders;
 import com.sun.jersey.spi.MessageBodyWorkers;
+import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
+import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 
 import javax.ws.rs.core.Context;
 import java.util.ArrayList;
@@ -104,6 +100,7 @@ public final class AhcClientHandler implements ClientHandler {
 
     /**
      * Translate the {@link ClientRequest} into a AsyncHttpClient request, and execute it.
+     *
      * @param cr the HTTP request.
      * @return the {@link ClientResponse}
      * @throws ClientHandlerException
@@ -134,50 +131,50 @@ public final class AhcClientHandler implements ClientHandler {
             throw new ClientHandlerException(e);
         }
     }
-    
+
     /**
      * append request cookies and override existing cookies
-     * 
+     *
      * @param responseCookies list of cookies from response
      */
-    private void applyResponseCookies(List<Cookie> responseCookies){
-      if ( responseCookies != null ){
-        for ( Cookie rc : responseCookies ){
-          // remove existing cookie
-          Iterator<Cookie> it = cookies.iterator();
-          while ( it.hasNext() ){
-            Cookie c = it.next();
-            if ( isSame(rc, c) )
-            {
-              it.remove();
-              break;
+    private void applyResponseCookies(List<Cookie> responseCookies) {
+        if (responseCookies != null) {
+            for (Cookie rc : responseCookies) {
+                // remove existing cookie
+                Iterator<Cookie> it = cookies.iterator();
+                while (it.hasNext()) {
+                    Cookie c = it.next();
+                    if (isSame(rc, c)) {
+                        it.remove();
+                        break;
+                    }
+                }
+                // add new cookie
+                cookies.add(rc);
             }
-          }
-          // add new cookie
-          cookies.add(rc);
         }
-      }
     }
-    
-    private boolean isSame(Cookie c, Cookie o){
-      return isEquals(c.getDomain(), o.getDomain()) &&
-             isEquals(c.getPath(), o.getPath()) &&
-             isEquals(c.getName(), o.getName());
+
+    private boolean isSame(Cookie c, Cookie o) {
+        return isEquals(c.getDomain(), o.getDomain()) &&
+                isEquals(c.getPath(), o.getPath()) &&
+                isEquals(c.getName(), o.getName());
     }
-    
-    private boolean isEquals( Object o, Object o2 ){
-      return (o == null && o2 == null) || o != null && o.equals(o2);
+
+    private boolean isEquals(Object o, Object o2) {
+        return (o == null && o2 == null) || o != null && o.equals(o2);
     }
 
     /**
      * Check if a body needs to be constructed based on a method's name.
+     *
      * @param method An HTTP method
      * @return true if s body can be allowed.
      */
     private boolean allowBody(String method) {
-        if ( method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("OPTIONS")
-                    && method.equalsIgnoreCase("TRACE")
-                    && method.equalsIgnoreCase("HEAD")) {
+        if (method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("OPTIONS")
+                && method.equalsIgnoreCase("TRACE")
+                && method.equalsIgnoreCase("HEAD")) {
             return false;
         } else {
             return true;
@@ -185,7 +182,8 @@ public final class AhcClientHandler implements ClientHandler {
     }
 
     /**
-     * Return the {@link RequestBuilder} based on a method 
+     * Return the {@link RequestBuilder} based on a method
+     *
      * @param cr the HTTP request.
      * @return {@link RequestBuilder}
      */
@@ -222,9 +220,10 @@ public final class AhcClientHandler implements ClientHandler {
     /**
      * Return the instance of {@link com.sun.jersey.api.client.RequestWriter}. This instance will be injected
      * within Jersey so it cannot be null.
+     *
      * @return the instance of {@link com.sun.jersey.api.client.RequestWriter}.
      */
-    public AhcRequestWriter getAhcRequestWriter(){
+    public AhcRequestWriter getAhcRequestWriter() {
         return requestWriter;
     }
 
@@ -233,5 +232,5 @@ public final class AhcClientHandler implements ClientHandler {
             requestBuilder.addCookie(c);
         }
     }
-    
+
 }
