@@ -75,7 +75,11 @@ public class AhcRequestWriter extends RequestWriter {
         for (Map.Entry<String, List<Object>> e : metadata.entrySet()) {
             List<Object> vs = e.getValue();
             for (Object o : vs) {
-                requestBuilder.addHeader(e.getKey(), headerValueToString(o));
+                if (String.class.isAssignableFrom( o.getClass() )) {
+                    requestBuilder.addHeader(e.getKey(), o.toString());
+                } else {
+                    requestBuilder.addHeader(e.getKey(), headerValueToString(o));
+                }
             }
         }
     }
