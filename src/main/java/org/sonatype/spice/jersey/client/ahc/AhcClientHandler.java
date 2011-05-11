@@ -27,6 +27,7 @@ import com.sun.jersey.spi.MessageBodyWorkers;
 
 import javax.ws.rs.core.Context;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +119,7 @@ public final class AhcClientHandler implements ClientHandler {
 
             final Response response = client.executeRequest(requestBuilder.build()).get();
 
-            cookies = response.getCookies();
+            applyResponseCookies(response.getCookies());
 
             ClientResponse r = new ClientResponse(response.getStatusCode(),
                     getInBoundHeaders(response),
@@ -132,6 +133,40 @@ public final class AhcClientHandler implements ClientHandler {
         } catch (Exception e) {
             throw new ClientHandlerException(e);
         }
+    }
+    
+    /**
+     * append request cookies and override existing cookies
+     * 
+     * @param responseCookies list of cookies from response
+     */
+    private void applyResponseCookies(List<Cookie> responseCookies){
+      if ( responseCookies != null ){
+        for ( Cookie rc : responseCookies ){
+          // remove existing cookie
+          Iterator<Cookie> it = cookies.iterator();
+          while ( it.hasNext() ){
+            Cookie c = it.next();
+            if ( isSame(rc, c) )
+            {
+              it.remove();
+              break;
+            }
+          }
+          // add new cookie
+          cookies.add(rc);
+        }
+      }
+    }
+    
+    private boolean isSame(Cookie c, Cookie o){
+      return isEquals(c.getDomain(), o.getDomain()) &&
+             isEquals(c.getPath(), o.getPath()) &&
+             isEquals(c.getName(), o.getName());
+    }
+    
+    private boolean isEquals( Object o, Object o2 ){
+      return (o == null && o2 == null) || o != null && o.equals(o2);
     }
 
     /**
