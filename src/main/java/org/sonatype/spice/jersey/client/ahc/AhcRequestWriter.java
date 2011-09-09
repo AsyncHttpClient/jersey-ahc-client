@@ -78,7 +78,7 @@ public class AhcRequestWriter extends RequestWriter {
                 if (String.class.isAssignableFrom( o.getClass() )) {
                     requestBuilder.addHeader(e.getKey(), o.toString());
                 } else {
-                    requestBuilder.addHeader(e.getKey(), headerValueToString(o));
+                    requestBuilder.addHeader(e.getKey(), ClientRequest.getHeaderValue(o));
                 }
             }
         }

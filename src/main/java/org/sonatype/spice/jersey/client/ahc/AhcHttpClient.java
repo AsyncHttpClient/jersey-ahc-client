@@ -144,7 +144,7 @@ public class AhcHttpClient extends Client {
     }
 
     @Override
-    protected void finalize(){
+    protected void finalize() throws Throwable{
         try {
             // Do not close the AHCClient.
             super.destroy();
