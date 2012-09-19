@@ -55,16 +55,19 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <properties>
+        <jersey.version>1.5</jersey.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.5</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>1.5</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -104,7 +107,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>1.5</version>
+            <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
