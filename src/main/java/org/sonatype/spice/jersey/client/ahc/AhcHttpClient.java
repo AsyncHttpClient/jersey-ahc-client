@@ -149,7 +149,11 @@ public class AhcHttpClient extends Client {
             // Do not close the AHCClient.
             super.destroy();
         } finally {
-            super.finalize();            
+            try {
+                super.finalize();
+            } catch (Throwable e) {
+                // TODO swallow?
+            }
         }
     }
 
