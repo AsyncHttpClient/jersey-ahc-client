@@ -42,6 +42,11 @@
             <name>Jeanfrancois Arcand</name>
             <email>jfarcand@apache.org</email>
         </developer>
+        <developer>
+            <id>simonetripodi</id>
+            <name>Simone Tripodi</name>
+            <email>simonetripodi@apache.org</email>
+        </developer>
     </developers>
     <licenses>
         <license>
