@@ -61,7 +61,7 @@
         </license>
     </licenses>
     <properties>
-        <jersey.version>1.5</jersey.version>
+        <jersey.version>1.14</jersey.version>
     </properties>
     <dependencies>
         <dependency>
@@ -112,6 +112,12 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-bundle</artifactId>
             <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.sonatype.spice.jersey.client.ahc;
 
+import static com.sun.jersey.api.client.ClientRequest.getHeaderValue;
+
 import com.ning.http.client.PerRequestConfig;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
@@ -77,7 +79,7 @@ public class AhcRequestWriter extends RequestWriter {
                 if (String.class.isAssignableFrom( o.getClass() )) {
                     requestBuilder.addHeader(e.getKey(), o.toString());
                 } else {
-                    requestBuilder.addHeader(e.getKey(), headerValueToString(o));
+                    requestBuilder.addHeader(e.getKey(), getHeaderValue(o));
                 }
             }
         }
