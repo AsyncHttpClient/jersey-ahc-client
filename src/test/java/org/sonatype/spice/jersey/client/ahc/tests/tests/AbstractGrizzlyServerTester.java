@@ -33,7 +33,7 @@ public abstract class AbstractGrizzlyServerTester extends TestCase {
     private SelectorThread selectorThread;
 
     private int port = getEnvVariable("JERSEY_HTTP_PORT", 9997);
-    
+
     private static int getEnvVariable(final String varName, int defaultValue) {
         if (null == varName) {
             return defaultValue;
@@ -52,26 +52,26 @@ public abstract class AbstractGrizzlyServerTester extends TestCase {
     public AbstractGrizzlyServerTester(String name) {
         super(name);
     }
-    
+
     public UriBuilder getUri() {
         return UriBuilder.fromUri("http://localhost").port(port).path(CONTEXT);
     }
-    
-    public void startServer(Class... resources) {
+
+    public void startServer(Class<?>... resources) {
         start(ContainerFactory.createContainer(Adapter.class, resources));
     }
-    
+
     public void startServer(ResourceConfig config) {
         start(ContainerFactory.createContainer(Adapter.class, config));
     }
-    
+
     private void start(Adapter adapter) {
         if (selectorThread != null && selectorThread.isRunning()){
             stopServer();
         }
 
         System.out.println("Starting GrizzlyServer port number = " + port);
-        
+
         URI u = UriBuilder.fromUri("http://localhost").port(port).build();
         try {
             selectorThread = GrizzlyServerFactory.create(u, adapter);
@@ -91,13 +91,13 @@ public abstract class AbstractGrizzlyServerTester extends TestCase {
             }
         }
     }
-    
+
     public void stopServer() {
         if (selectorThread.isRunning()) {
             selectorThread.stopEndpoint();
         }
     }
-    
+
     @Override
     public void tearDown() {
         stopServer();
