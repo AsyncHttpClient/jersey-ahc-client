@@ -54,7 +54,7 @@ public class AhcRequestWriter extends RequestWriter {
                 re.writeRequestEntity(new CommittingOutputStream(baos) {
                     @Override
                     protected void commit() throws IOException {
-                        configureHeaders(cr.getMetadata(), requestBuilder);
+                        configureHeaders(cr.getHeaders(), requestBuilder);
                     }
                 });
             } catch (IOException ex) {
@@ -68,7 +68,7 @@ public class AhcRequestWriter extends RequestWriter {
                 }
             });
         } else {
-            configureHeaders(cr.getMetadata(), requestBuilder);
+            configureHeaders(cr.getHeaders(), requestBuilder);
         }
     }
 
