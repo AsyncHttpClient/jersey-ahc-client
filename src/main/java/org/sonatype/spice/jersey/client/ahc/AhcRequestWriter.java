@@ -61,13 +61,12 @@ public class AhcRequestWriter extends RequestWriter {
 
             final byte[] content = baos.toByteArray();
             requestBuilder.setBody(new Request.EntityWriter() {
-                @Override
                 public void writeEntity(OutputStream out) throws IOException {
                     out.write(content);
                 }
             });
         } else {
-            configureHeaders(cr.getMetadata(), requestBuilder);            
+            configureHeaders(cr.getMetadata(), requestBuilder);
         }
     }
 
