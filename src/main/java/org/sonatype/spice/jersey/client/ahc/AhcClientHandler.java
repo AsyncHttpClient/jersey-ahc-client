@@ -105,7 +105,6 @@ public final class AhcClientHandler implements ClientHandler {
      * @return the {@link ClientResponse}
      * @throws ClientHandlerException
      */
-    @Override
     public ClientResponse handle(final ClientRequest cr)
             throws ClientHandlerException {
 
