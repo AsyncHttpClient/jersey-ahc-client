@@ -14,12 +14,12 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.sonatype.forge</groupId>
-        <artifactId>forge-parent</artifactId>
-        <version>12</version>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.sonatype.spice</groupId>
+    <groupId>org.jfarcand</groupId>
     <artifactId>jersey-ahc-client</artifactId>
     <name>jersey-ahc-client</name>
     <version>1.0.4-SNAPSHOT</version>
@@ -27,11 +27,11 @@
     <description>
         Async Http Client implementation for the Jersey Client API.
     </description>
-    <url>http://github.com/sonatype/jersey-ahc-client</url>
+    <url>http://github.com/AsyncHttpClient/jersey-ahc-client</url>
     <scm>
-        <connection>scm:git:git@github.com:sonatype/jersey-ahc-client.git</connection>
-        <url>scm:git:git@github.com:sonatype/jersey-ahc-client.git</url>
-        <developerConnection>scm:git:git@github.com:sonatype/jersey-ahc-client.git</developerConnection>
+        <connection>scm:git:git@github.com:AsyncHttpClient/jersey-ahc-client.git</connection>
+        <url>scm:git:git@github.com:AsyncHttpClient/jersey-ahc-client.git</url>
+        <developerConnection>scm:git:git@github.com:AsyncHttpClient/jersey-ahc-client.git</developerConnection>
     </scm>
     <prerequisites>
         <maven>2.0.9</maven>
