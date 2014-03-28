@@ -63,6 +63,7 @@
     <properties>
         <jersey.version>1.14</jersey.version>
         <async-http-client-version>1.7.24</async-http-client-version>
+        <netty-version>3.7.0.Final</netty-version>
     </properties>
     <dependencies>
         <dependency>
@@ -121,6 +122,11 @@
             <artifactId>jersey-bundle</artifactId>
             <version>${jersey.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>${netty-version}</version>
         </dependency>
     </dependencies>
     <build>
