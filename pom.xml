@@ -62,6 +62,7 @@
     </licenses>
     <properties>
         <jersey.version>1.14</jersey.version>
+        <async-http-client-version>1.7.24</async-http-client-version>
     </properties>
     <dependencies>
         <dependency>
@@ -83,7 +84,7 @@
         <dependency>
             <groupId>com.ning</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>1.7.6</version>
+            <version>${async-http-client-version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
