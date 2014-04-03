@@ -62,8 +62,8 @@
     </licenses>
     <properties>
         <jersey.version>1.14</jersey.version>
-        <async-http-client-version>1.7.24</async-http-client-version>
-        <netty-version>3.7.0.Final</netty-version>
+        <async-http-client-version>1.8.5</async-http-client-version>
+        <netty-version>3.9.0.Final</netty-version>
     </properties>
     <dependencies>
         <dependency>

@@ -11,21 +11,27 @@
  *******************************************************************************/
 package org.sonatype.spice.jersey.client.ahc;
 
-import com.ning.http.client.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Context;
+
+import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
+import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
+
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.FluentCaseInsensitiveStringsMap;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
+import com.ning.http.client.cookie.Cookie;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.header.InBoundHeaders;
 import com.sun.jersey.spi.MessageBodyWorkers;
-import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
-import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
-
-import javax.ws.rs.core.Context;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A root handler with Sonatype AsyncHttpClient acting as a backend.
@@ -55,7 +61,7 @@ public final class AhcClientHandler implements ClientHandler {
 
     private final AhcRequestWriter requestWriter = new AhcRequestWriter();
 
-    private List<Cookie> cookies = new ArrayList<Cookie>();
+    private final List<Cookie> cookies = new ArrayList<Cookie>();
 
     @Context
     private MessageBodyWorkers workers;
@@ -65,7 +71,7 @@ public final class AhcClientHandler implements ClientHandler {
      *
      * @param client the {@link AsyncHttpClient}.
      */
-    public AhcClientHandler(AsyncHttpClient client) {
+    public AhcClientHandler(final AsyncHttpClient client) {
         this(client, new DefaultAhcConfig());
     }
 
@@ -75,7 +81,7 @@ public final class AhcClientHandler implements ClientHandler {
      * @param client the {@link AsyncHttpClient}.
      * @param config the client configuration.
      */
-    public AhcClientHandler(AsyncHttpClient client, AhcConfig config) {
+    public AhcClientHandler(final AsyncHttpClient client, final AhcConfig config) {
         this.client = client;
         this.config = config;
     }
@@ -105,6 +111,7 @@ public final class AhcClientHandler implements ClientHandler {
      * @return the {@link ClientResponse}
      * @throws ClientHandlerException
      */
+    @Override
     public ClientResponse handle(final ClientRequest cr)
             throws ClientHandlerException {
 
@@ -117,7 +124,7 @@ public final class AhcClientHandler implements ClientHandler {
 
             applyResponseCookies(response.getCookies());
 
-            ClientResponse r = new ClientResponse(response.getStatusCode(),
+            final ClientResponse r = new ClientResponse(response.getStatusCode(),
                     getInBoundHeaders(response),
                     response.getResponseBodyAsStream(),
                     workers);
@@ -126,7 +133,7 @@ public final class AhcClientHandler implements ClientHandler {
                 r.close();
             }
             return r;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new ClientHandlerException(e);
         }
     }
@@ -136,13 +143,13 @@ public final class AhcClientHandler implements ClientHandler {
      *
      * @param responseCookies list of cookies from response
      */
-    private void applyResponseCookies(List<Cookie> responseCookies) {
+    private void applyResponseCookies(final List<Cookie> responseCookies) {
         if (responseCookies != null) {
-            for (Cookie rc : responseCookies) {
+            for (final Cookie rc : responseCookies) {
                 // remove existing cookie
-                Iterator<Cookie> it = cookies.iterator();
+                final Iterator<Cookie> it = cookies.iterator();
                 while (it.hasNext()) {
-                    Cookie c = it.next();
+                    final Cookie c = it.next();
                     if (isSame(rc, c)) {
                         it.remove();
                         break;
@@ -154,13 +161,13 @@ public final class AhcClientHandler implements ClientHandler {
         }
     }
 
-    private boolean isSame(Cookie c, Cookie o) {
+    private boolean isSame(final Cookie c, final Cookie o) {
         return isEquals(c.getDomain(), o.getDomain()) &&
                 isEquals(c.getPath(), o.getPath()) &&
                 isEquals(c.getName(), o.getName());
     }
 
-    private boolean isEquals(Object o, Object o2) {
+    private boolean isEquals(final Object o, final Object o2) {
         return (o == null && o2 == null) || o != null && o.equals(o2);
     }
 
@@ -170,7 +177,7 @@ public final class AhcClientHandler implements ClientHandler {
      * @param method An HTTP method
      * @return true if s body can be allowed.
      */
-    private boolean allowBody(String method) {
+    private boolean allowBody(final String method) {
         if (method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("OPTIONS")
                 && method.equalsIgnoreCase("TRACE")
                 && method.equalsIgnoreCase("HEAD")) {
@@ -186,7 +193,7 @@ public final class AhcClientHandler implements ClientHandler {
      * @param cr the HTTP request.
      * @return {@link RequestBuilder}
      */
-    private RequestBuilder getRequestBuilder(ClientRequest cr) {
+    private RequestBuilder getRequestBuilder(final ClientRequest cr) {
         final String strMethod = cr.getMethod();
         final String uri = cr.getURI().toString();
 
@@ -207,10 +214,10 @@ public final class AhcClientHandler implements ClientHandler {
         }
     }
 
-    private InBoundHeaders getInBoundHeaders(Response response) {
-        InBoundHeaders headers = new InBoundHeaders();
-        FluentCaseInsensitiveStringsMap respHeaders = response.getHeaders();
-        for (Map.Entry<String, List<String>> header : respHeaders) {
+    private InBoundHeaders getInBoundHeaders(final Response response) {
+        final InBoundHeaders headers = new InBoundHeaders();
+        final FluentCaseInsensitiveStringsMap respHeaders = response.getHeaders();
+        for (final Map.Entry<String, List<String>> header : respHeaders) {
             headers.put(header.getKey(), header.getValue());
         }
         return headers;
@@ -226,8 +233,8 @@ public final class AhcClientHandler implements ClientHandler {
         return requestWriter;
     }
 
-    private void handleCookie(RequestBuilder requestBuilder) {
-        for (Cookie c : cookies) {
+    private void handleCookie(final RequestBuilder requestBuilder) {
+        for (final Cookie c : cookies) {
             requestBuilder.addCookie(c);
         }
     }

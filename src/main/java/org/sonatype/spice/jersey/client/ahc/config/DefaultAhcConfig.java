@@ -18,6 +18,7 @@ public class DefaultAhcConfig extends DefaultClientConfig implements AhcConfig{
 
     private AsyncHttpClientConfig.Builder config;
 
+    @Override
     public AsyncHttpClientConfig.Builder getAsyncHttpClientConfigBuilder() {
 
         if (config == null) {

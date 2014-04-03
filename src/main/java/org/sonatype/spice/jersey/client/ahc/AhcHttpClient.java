@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.sonatype.spice.jersey.client.ahc;
 
+import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
+import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
+
 import com.ning.http.client.AsyncHttpClient;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
-import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
-import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 
 /**
@@ -41,8 +42,8 @@ import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
  */
 public class AhcHttpClient extends Client {
 
-    private AhcClientHandler clientHandler;
-    
+    private final AhcClientHandler clientHandler;
+
     /**
      * Create a new client instance.
      *
@@ -57,7 +58,7 @@ public class AhcHttpClient extends Client {
      * @param root the root client handler for dispatching a request and
      *        returning a response.
      */
-    public AhcHttpClient(AhcClientHandler root) {
+    public AhcHttpClient(final AhcClientHandler root) {
         this(root, null);
     }
 
@@ -74,8 +75,8 @@ public class AhcHttpClient extends Client {
      *             is utilized instead.
      */
     @Deprecated
-    public AhcHttpClient(AhcClientHandler root, ClientConfig config,
-            IoCComponentProviderFactory provider) {
+    public AhcHttpClient(final AhcClientHandler root, final ClientConfig config,
+            final IoCComponentProviderFactory provider) {
         this(root, provider);
     }
 
@@ -87,8 +88,8 @@ public class AhcHttpClient extends Client {
      *        returning a response.
      * @param provider the IoC component provider factory.
      */
-    public AhcHttpClient(AhcClientHandler root,
-            IoCComponentProviderFactory provider) {
+    public AhcHttpClient(final AhcClientHandler root,
+            final IoCComponentProviderFactory provider) {
         super(root, root.getConfig(), provider);
 
         this.clientHandler = root;
@@ -119,7 +120,7 @@ public class AhcHttpClient extends Client {
      * @param cc the client configuration.
      * @return a default client.
      */
-    public static AhcHttpClient create(ClientConfig cc) {
+    public static AhcHttpClient create(final ClientConfig cc) {
         return create(cc, null);
     }
 
@@ -130,7 +131,7 @@ public class AhcHttpClient extends Client {
      * @param provider the IoC component provider factory.
      * @return a default client.
      */
-    public static AhcHttpClient create(ClientConfig cc, IoCComponentProviderFactory provider) {
+    public static AhcHttpClient create(final ClientConfig cc, final IoCComponentProviderFactory provider) {
         return new AhcHttpClient(createDefaultClientHander(cc), provider);
     }
 
@@ -151,7 +152,7 @@ public class AhcHttpClient extends Client {
         } finally {
             try {
                 super.finalize();
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 // TODO swallow?
             }
         }
@@ -162,10 +163,10 @@ public class AhcHttpClient extends Client {
      *
      * @return a default AsyncHttpClient client handler.
      */
-    private static AhcClientHandler createDefaultClientHander(ClientConfig cc) {
+    private static AhcClientHandler createDefaultClientHander(final ClientConfig cc) {
 
         if (AhcConfig.class.isAssignableFrom(cc.getClass()) || DefaultAhcConfig.class.isAssignableFrom(cc.getClass())) {
-            AhcConfig c = AhcConfig.class.cast(cc);
+            final AhcConfig c = AhcConfig.class.cast(cc);
             return new AhcClientHandler(new AsyncHttpClient(c.getAsyncHttpClientConfigBuilder().build()), c);
         } else {
             throw new IllegalStateException("Client Config Type not supported");
@@ -173,17 +174,17 @@ public class AhcHttpClient extends Client {
     }
 
     @Override
-    public void setFollowRedirects(Boolean redirect) {
+    public void setFollowRedirects(final Boolean redirect) {
         clientHandler.getConfig().getAsyncHttpClientConfigBuilder().setFollowRedirects(redirect);
     }
 
     @Override
-    public void setReadTimeout(Integer interval) {
+    public void setReadTimeout(final Integer interval) {
         clientHandler.getConfig().getAsyncHttpClientConfigBuilder().setRequestTimeoutInMs(interval);
     }
 
     @Override
-    public void setConnectTimeout(Integer interval) {
+    public void setConnectTimeout(final Integer interval) {
         clientHandler.getConfig().getAsyncHttpClientConfigBuilder().setConnectionTimeoutInMs(interval);
     }
 }
