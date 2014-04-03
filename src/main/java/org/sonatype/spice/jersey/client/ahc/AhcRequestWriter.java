@@ -13,6 +13,16 @@ package org.sonatype.spice.jersey.client.ahc;
 
 import static com.sun.jersey.api.client.ClientRequest.getHeaderValue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
+
 import com.ning.http.client.PerRequestConfig;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
@@ -20,14 +30,6 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.CommittingOutputStream;
 import com.sun.jersey.api.client.RequestWriter;
-import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
-
-import javax.ws.rs.core.MultivaluedMap;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
 
 /**
  * An implementation of {@link RequestWriter} that also configure the AHC {@link RequestBuilder}
@@ -36,13 +38,13 @@ import java.util.Map;
  */
 public class AhcRequestWriter extends RequestWriter {
 
-    public void configureRequest(final RequestBuilder requestBuilder, final ClientRequest cr, boolean needsBody) {
+    public void configureRequest(final RequestBuilder requestBuilder, final ClientRequest cr, final boolean needsBody) {
         final Map<String, Object> props = cr.getProperties();
 
         // Set the read timeout
         final Integer readTimeout = (Integer) props.get(AhcConfig.PROPERTY_READ_TIMEOUT);
         if (readTimeout != null) {
-            PerRequestConfig c = new PerRequestConfig();
+            final PerRequestConfig c = new PerRequestConfig();
             c.setRequestTimeoutInMs(readTimeout);
             requestBuilder.setPerRequestConfig(c);
         }
@@ -57,13 +59,14 @@ public class AhcRequestWriter extends RequestWriter {
                         configureHeaders(cr.getHeaders(), requestBuilder);
                     }
                 });
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 throw new ClientHandlerException(ex);
             }
 
             final byte[] content = baos.toByteArray();
             requestBuilder.setBody(new Request.EntityWriter() {
-                public void writeEntity(OutputStream out) throws IOException {
+                @Override
+                public void writeEntity(final OutputStream out) throws IOException {
                     out.write(content);
                 }
             });
@@ -72,10 +75,10 @@ public class AhcRequestWriter extends RequestWriter {
         }
     }
 
-    private void configureHeaders(MultivaluedMap<String, Object> metadata, RequestBuilder requestBuilder) {
-        for (Map.Entry<String, List<Object>> e : metadata.entrySet()) {
-            List<Object> vs = e.getValue();
-            for (Object o : vs) {
+    private void configureHeaders(final MultivaluedMap<String, Object> metadata, final RequestBuilder requestBuilder) {
+        for (final Map.Entry<String, List<Object>> e : metadata.entrySet()) {
+            final List<Object> vs = e.getValue();
+            for (final Object o : vs) {
                 if (String.class.isAssignableFrom( o.getClass() )) {
                     requestBuilder.addHeader(e.getKey(), o.toString());
                 } else {

@@ -12,16 +12,17 @@
 
 package org.sonatype.spice.jersey.client.ahc.tests.tests;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import org.sonatype.spice.jersey.client.ahc.AhcHttpClient;
-import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.sonatype.spice.jersey.client.ahc.AhcHttpClient;
+import org.sonatype.spice.jersey.client.ahc.config.AhcConfig;
+
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 /**
  *
@@ -36,11 +37,11 @@ public class NoEntityTest extends AbstractGrizzlyServerTester {
         }
 
         @POST
-        public void post(String entity) {
+        public void post(final String entity) {
         }
     }
 
-    public NoEntityTest(String testName) {
+    public NoEntityTest(final String testName) {
         super(testName);
     }
 
@@ -48,44 +49,44 @@ public class NoEntityTest extends AbstractGrizzlyServerTester {
         return AhcHttpClient.create();
     }
 
-    protected AhcHttpClient createClient(AhcConfig cc) {
+    protected AhcHttpClient createClient(final AhcConfig cc) {
         return AhcHttpClient.create(cc);
     }
 
     public void testGet() {
         startServer(HttpMethodResource.class);
-        WebResource r = createClient().resource(getUri().path("test").build());
+        final WebResource r = createClient().resource(getUri().path("test").build());
 
         for (int i = 0; i < 5; i++) {
-            ClientResponse cr = r.get(ClientResponse.class);
+            final ClientResponse cr = r.get(ClientResponse.class);
         }
     }
 
     public void testGetWithClose() {
         startServer(HttpMethodResource.class);
-        WebResource r = createClient().resource(getUri().path("test").build());
+        final WebResource r = createClient().resource(getUri().path("test").build());
 
         for (int i = 0; i < 5; i++) {
-            ClientResponse cr = r.get(ClientResponse.class);
+            final ClientResponse cr = r.get(ClientResponse.class);
             cr.close();
         }
     }
 
     public void testPost() {
         startServer(HttpMethodResource.class);
-        WebResource r = createClient().resource(getUri().path("test").build());
+        final WebResource r = createClient().resource(getUri().path("test").build());
 
         for (int i = 0; i < 5; i++) {
-            ClientResponse cr = r.post(ClientResponse.class);
+            final ClientResponse cr = r.post(ClientResponse.class);
         }
     }
 
     public void testPostWithClose() {
         startServer(HttpMethodResource.class);
-        WebResource r = createClient().resource(getUri().path("test").build());
+        final WebResource r = createClient().resource(getUri().path("test").build());
 
         for (int i = 0; i < 5; i++) {
-            ClientResponse cr = r.post(ClientResponse.class);
+            final ClientResponse cr = r.post(ClientResponse.class);
             cr.close();
         }
     }

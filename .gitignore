@@ -1,18 +1,49 @@
+######################
+# Logs
+######################
+*.log
+/logs
+
+######################
+# Build output directies
+######################
+/target
+*/target
+/build
+*/build
+test-output
 *.class
 *~
 .*.swp
 .*.swo
 .loadpath
 .buildpath
+
+######################
+# Eclipse specific files/directories
+######################
 .classpath
 .project
 .settings
+.metadata
+
+######################
+# IntelliJ specific files/directories
+######################
+out
 .idea
 *.iml
 *.ipr
 *.iws
+*.iml
+atlassian-ide-plugin.xml
 nbproject
-.DS_Store
-target
-test-output
 /META-INF/MANIFEST.MF
+
+######################
+# OS generated files
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db

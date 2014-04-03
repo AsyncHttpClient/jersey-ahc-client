@@ -62,6 +62,8 @@
     </licenses>
     <properties>
         <jersey.version>1.14</jersey.version>
+        <async-http-client-version>1.8.5</async-http-client-version>
+        <netty-version>3.9.0.Final</netty-version>
     </properties>
     <dependencies>
         <dependency>
@@ -83,7 +85,7 @@
         <dependency>
             <groupId>com.ning</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>1.7.6</version>
+            <version>${async-http-client-version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
@@ -121,6 +123,11 @@
             <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>${netty-version}</version>
+        </dependency>
     </dependencies>
     <build>
         <defaultGoal>install</defaultGoal>
@@ -149,6 +156,7 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
+                <version>2.4.0</version>
                 <configuration>
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
@@ -197,7 +205,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
                 <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <compilerVersion>1.6</compilerVersion>
                     <maxmem>1024m</maxmem>
                 </configuration>
             </plugin>
