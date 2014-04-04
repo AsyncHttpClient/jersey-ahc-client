@@ -22,7 +22,7 @@
     <groupId>org.jfarcand</groupId>
     <artifactId>jersey-ahc-client</artifactId>
     <name>jersey-ahc-client</name>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <description>
         Async Http Client implementation for the Jersey Client API.
