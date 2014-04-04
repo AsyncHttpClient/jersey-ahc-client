@@ -6,7 +6,7 @@ The Jersey Async HTTP Client library is simple to use. Add it to your Maven proj
          <dependency>
              <groupId>org.jfarcand</groupId>
              <artifactId>jersey-ahc-client</artifactId>
-             <version>1.0.4</version>
+             <version>1.0.5</version>
          </dependency>
 ```
 
