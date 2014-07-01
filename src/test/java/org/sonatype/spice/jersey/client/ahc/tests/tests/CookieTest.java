@@ -40,10 +40,15 @@
 
 package org.sonatype.spice.jersey.client.ahc.tests.tests;
 
+import java.util.concurrent.CountDownLatch;
+
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.container.filter.LoggingFilter;
 import com.sun.jersey.api.core.DefaultResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonatype.spice.jersey.client.ahc.AhcHttpClient;
 import org.sonatype.spice.jersey.client.ahc.config.DefaultAhcConfig;
 
@@ -56,6 +61,7 @@ import javax.ws.rs.core.*;
  * @author Paul.Sandoz@Sun.Com
  */
 public class CookieTest extends AbstractGrizzlyServerTester {
+    private final static Logger log = LoggerFactory.getLogger(CookieTest.class);
     @Path("/")
     public static class CookieResource {
         @GET
@@ -123,4 +129,56 @@ public class CookieTest extends AbstractGrizzlyServerTester {
         assertEquals("wo-cookie", r.post(String.class));
         assertEquals("value", r.get(String.class));
     }
+
+    public void testCookieThreading() throws Exception {
+        ResourceConfig rc = new DefaultResourceConfig(CookieResource.class);
+        rc.getProperties().put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS,
+                LoggingFilter.class.getName());
+        startServer(rc);
+
+        DefaultAhcConfig config = new DefaultAhcConfig();
+        AhcHttpClient c = AhcHttpClient.create(config);
+
+        final WebResource r = c.resource(getUri().build());
+        // Set first cookie
+        assertEquals("NO-COOKIE", r.get(String.class));
+        CountDownLatch latch = new CountDownLatch(2);
+        // Test concurrent requests
+        CookieThreadTest a = new CookieThreadTest(r, latch);
+        CookieThreadTest b = new CookieThreadTest(r, latch);
+        a.start();
+        b.start();
+        latch.await();
+        if (a.e != null) {
+            fail("Unexpected Exception " + a.e);
+        }
+        if (b.e != null) {
+            fail("Unexpected Exception " + a.e);
+        }
+    }
+    public static class CookieThreadTest extends Thread {
+        private WebResource r;
+        private CountDownLatch latch;
+        Exception e;
+        public CookieThreadTest(WebResource r, CountDownLatch latch) {
+            this.r =r;
+            this.latch = latch;
+        }
+        @Override
+        public void run() {
+            try {
+                for (int i=0; i<1000; i++) {
+                    assertEquals("value", r.get(String.class));
+                }
+            } catch (RuntimeException e) {
+                log.error("Threading error",e);
+                this.e = e;
+                throw e;
+            } finally {
+                latch.countDown();
+            }
+        }
+    }
+    
+    
 }

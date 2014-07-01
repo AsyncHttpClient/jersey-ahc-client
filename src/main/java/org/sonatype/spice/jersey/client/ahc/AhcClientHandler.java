@@ -12,9 +12,11 @@
 package org.sonatype.spice.jersey.client.ahc;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.ws.rs.core.Context;
 
@@ -60,8 +62,8 @@ public final class AhcClientHandler implements ClientHandler {
     private final AhcConfig config;
 
     private final AhcRequestWriter requestWriter = new AhcRequestWriter();
-
-    private final List<Cookie> cookies = new ArrayList<Cookie>();
+    //ConcurrentSkipListSet can be iterated with and modified in a thread safe manner
+    private final ConcurrentSkipListSet<Cookie> cookies = new ConcurrentSkipListSet<Cookie>(new CookieComparator());
 
     @Context
     private MessageBodyWorkers workers;
@@ -146,30 +148,37 @@ public final class AhcClientHandler implements ClientHandler {
     private void applyResponseCookies(final List<Cookie> responseCookies) {
         if (responseCookies != null) {
             for (final Cookie rc : responseCookies) {
-                // remove existing cookie
-                final Iterator<Cookie> it = cookies.iterator();
-                while (it.hasNext()) {
-                    final Cookie c = it.next();
-                    if (isSame(rc, c)) {
-                        it.remove();
-                        break;
-                    }
-                }
-                // add new cookie
+                // add or replace new cookie
                 cookies.add(rc);
             }
         }
     }
 
-    private boolean isSame(final Cookie c, final Cookie o) {
-        return isEquals(c.getDomain(), o.getDomain()) &&
-                isEquals(c.getPath(), o.getPath()) &&
-                isEquals(c.getName(), o.getName());
-    }
+    public final static class CookieComparator  implements Comparator<Cookie>{
 
-    private boolean isEquals(final Object o, final Object o2) {
-        return (o == null && o2 == null) || o != null && o.equals(o2);
+        @Override
+        public int compare(Cookie o1, Cookie o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            int retval = 0;
+            retval = compareStrings(o1.getDomain(),o2.getDomain());
+            if (retval != 0) return retval;
+            retval = compareStrings(o1.getPath(),o2.getPath());
+            if (retval != 0) return retval;
+            retval = compareStrings(o1.getName(),o2.getName());
+            return retval;
+        }
+        public int compareStrings(String o1, String o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            return o1.compareTo(o2);
+            
+        }
     }
+    
+
 
     /**
      * Check if a body needs to be constructed based on a method's name.
