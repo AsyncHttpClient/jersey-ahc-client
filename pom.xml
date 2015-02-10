@@ -22,7 +22,7 @@
     <groupId>org.jfarcand</groupId>
     <artifactId>jersey-ahc-client</artifactId>
     <name>jersey-ahc-client</name>
-    <version>1.0.5</version>
+    <version>1.0.5.jersey.1.7</version>
     <packaging>jar</packaging>
     <description>
         Async Http Client implementation for the Jersey Client API.
@@ -61,7 +61,7 @@
         </license>
     </licenses>
     <properties>
-        <jersey.version>1.14</jersey.version>
+        <jersey.version>1.7</jersey.version>
         <async-http-client-version>1.8.5</async-http-client-version>
         <netty-version>3.9.0.Final</netty-version>
     </properties>
@@ -75,6 +75,12 @@
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
             <version>${jersey.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.jettison</groupId>
+                    <artifactId>jettison</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
